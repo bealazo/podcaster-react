@@ -5,7 +5,7 @@ import StoreProvider from './store/StoreProvider';
 import Home from "./views/Home";
 import Header from "./components/Header";
 import Podcast from "./views/Podcast";
-import EpisodeDetails from "./components/EpisodeDetails";
+
 
 function App() {
 
@@ -24,13 +24,10 @@ function App() {
             element={<Home/>}
           />
           <Route
-            path="/podcast/:podcastId"
+            path="/podcast/*"
             element={<Podcast/>}
           />
-          <Route
-            path="/podcast/:podcastId/episodes/:episodeId"
-            element={<EpisodeDetails/>}
-          />
+      
         </Routes>
       </main>
     </Container>

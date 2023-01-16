@@ -3,7 +3,7 @@ import {Card, CardContent, CardActionArea,Typography, CardMedia, Divider,Box} fr
 
 
 const PodcastResume =(props)=>{
-  console.log(props.podcastresume)
+  
     return (
         
       <Link

@@ -1,45 +1,18 @@
-import {useEffect,useState} from "react";
-import {Link} from "react-router-dom"
-import {CORS_PREFIX} from "../utils/Utils";
-import {Box,Typography,Paper,Table,TableBody,TableCell,TableContainer,TableHead,TableRow } from '@mui/material';
-import Parser from "rss-parser";
+import {Link} from "react-router-dom";
+import {Typography,Paper,Table,TableBody,TableCell,TableContainer,TableHead,TableRow } from '@mui/material';
+
 
 const PodcastDetails =(props)=>{
 
-    const [episodes,setEpisodes]=useState([])
-
-      useEffect(()=>{          
-        
-        async function getEpisodes(){            
-           
-            const parser = new Parser();
-            let episodes = [];
-            const feed = await parser.parseURL(`${CORS_PREFIX}${props.podcastresume.feedUrl}`);
-            feed.items.forEach(episode => {
-              episodes.push({
-                id: episode.guid,
-                title: episode.title,
-                date: episode.pubDate,
-                duration: episode.itunes.duration,
-                content: episode.content,
-                url: episode.enclosure.url
-              });
-            });
-            setEpisodes(episodes);
-        }
-        getEpisodes();
-    },[])
-
-      
+    
     return (
-       /*  <Link
-        to={`/podcast/${props.podcastresume.id}/episodes/:episodeId`}
-        > */
+     
         <>
             <Paper elevation={1} sx={{ minWidth: 650,height:"auto", textAlign:"left", padding:"10px"}}>
-                    <Typography  variant="h4" fontWeight="bold">
-                    Episodes:
+                    <Typography  variant="h5" fontWeight="bold">
+                    Episodes: {props.podcastresume.episodes.length>0?props.podcastresume.episodes.length:null}                   
                     </Typography>
+                   
                 </Paper>       
             
             
@@ -54,24 +27,30 @@ const PodcastDetails =(props)=>{
                     </TableRow>
                     </TableHead>
                     <TableBody>
-                    {episodes.length?.map((episode) => (
+                    {props.podcastresume.episodes.length>0?props.podcastresume.episodes.map((episode) => (
                         <TableRow
                             key={episode.id}
                             sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
                             >
-                            <TableCell component="th" scope="row">
-                                {episode.title}
-                            </TableCell>
+                          
+                             <TableCell component="th" scope="row">
+                                <Link
+                                to={`/podcast/${props.podcastresume.id}/episodes/${episode.id}`} state={{episode: episode}}  style={{textDecoration: 'none'}}                         
+                                 >
+                                    {episode.title}
+                                </Link>
+                                </TableCell>
+                           
                             <TableCell align="right">{episode.date}</TableCell>
                             <TableCell align="right">{episode.duration}</TableCell>
                           
                         </TableRow>
-                    ))}
+                    )):null}
                     </TableBody>
                 </Table>
             </TableContainer>
         </>
-    //   </Link> 
+    
       );
 }
 

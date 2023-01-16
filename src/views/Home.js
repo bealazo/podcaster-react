@@ -17,31 +17,57 @@ const Home =()=>{
     useEffect(()=>{
 
         dispatch({type:types.is_loading, payload:true});
-        async function getPodcasts(){
-        await fetch(`${API_URL}/us/rss/toppodcasts/limit=100/genre=1310/json`)
-        .then((response) => response.json())
-        .then((data) => {
-            console.log(data)
-            let podcasts = [];
-            data.feed.entry.forEach(p => {
-                let podcast = {
-                  id: p.id.attributes["im:id"],
-                  img: p["im:image"][2].label,
-                  name: p["im:name"].label,
-                  author: p["im:artist"].label,
-                  summary: p.summary ? p.summary.label : "No description"
-                };
-                podcasts.push(podcast);
-              });
-              setPodcasts(podcasts)
-              setfilteredPodcasts(podcasts) 
-              dispatch({type:types.is_loading, payload:false});           
-            })
-            .catch(
-              error => console.log(`Error while fetching podcasts: ${error}`)
-            ) 
-        } 
-        getPodcasts();     
+          /*
+          Si no existe el key en localStorage o si está desactualizado, se hace la petición
+          y se actualiza el timestamp del objeto almacenado en el localStorage
+         */
+           const podcastsKey = "podcasts";
+
+        if (
+            localStorage.getItem(podcastsKey) === null ||
+            isOutOfDate(JSON.parse(localStorage.getItem(podcastsKey)).timestamp)
+        ) 
+        {
+            async function getPodcasts(){
+            await fetch(`${API_URL}/us/rss/toppodcasts/limit=100/genre=1310/json`)
+            .then((response) => response.json())
+            .then((data) => {
+                let podcasts = [];
+                data.feed.entry.forEach(p => {
+                    let podcast = {
+                    id: p.id.attributes["im:id"],
+                    img: p["im:image"][2].label,
+                    name: p["im:name"].label,
+                    author: p["im:artist"].label,
+                    summary: p.summary ? p.summary.label : "No description"
+                    };
+                    podcasts.push(podcast);
+                });
+                setPodcasts(podcasts)
+                setfilteredPodcasts(podcasts) 
+                // Se añade o actualiza el objeto del localStorage
+                    let lsObject = { value: podcasts, timestamp: new Date().getTime() };
+                    try {
+                    localStorage.setItem(podcastsKey, JSON.stringify(lsObject));
+                    } catch (e) {
+                    console.log("Local storage full, empty Local storage: " + e);
+                    }
+                 dispatch({type:types.is_loading, payload:false});           
+                })
+                .catch(
+                error => console.log(`Error while fetching podcasts: ${error}`)
+                ) 
+            } 
+            getPodcasts();
+        }
+        else{
+             // Se obtiene la respuesta almacenada en localStorage y se actualiza el estado
+            let lsPodcasts = JSON.parse(localStorage.getItem(podcastsKey)).value;
+            setPodcasts(lsPodcasts)
+            setfilteredPodcasts(lsPodcasts) 
+           
+            dispatch({type:types.is_loading, payload:false});
+        }     
     },[])
 
     const handleChange = (e) => {

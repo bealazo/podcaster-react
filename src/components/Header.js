@@ -1,13 +1,12 @@
-import {useContext, useEffect, useState} from 'react';
+import {useContext} from 'react';
 import { StoreContext } from '../store/StoreProvider';
 import { Grid,Divider,Typography,CircularProgress } from '@mui/material';
 import {Link} from "react-router-dom";
 
 const Header =()=>{
 
-    const [store, dispatch] = useContext(StoreContext);
-    console.log(store)
-    
+    const [store,dispatch] = useContext(StoreContext);
+       
     return (
         <>
             <Grid container spacing={2} marginTop="1vh">
