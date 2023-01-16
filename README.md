@@ -38,9 +38,11 @@ yarn build
 Se puede servir con un servidor estático, por ejemplo con serve, de la siguiente manera:
 
 npm install -g serve
+
 serve -s build
 
 o
 
 yarn global add serve
+
 serve -s build
