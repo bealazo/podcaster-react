@@ -1,6 +1,6 @@
 # Aplicación para reproducir podcasts
 
-Esta aplicación fue creada con create-react-app. Es una Single Page Application de manera que la navegación se realiza siempre en cliente. Se puede ejecutar en modo development o en modo production.
+Esta aplicación es una mini app para escuchar podcasts. Es una Single Page Application de manera que la navegación se realiza siempre en cliente. Se puede ejecutar en modo development o en modo production.
 ## Clonar repositorio
 
 Se debe clonar el repositorio podcaster-react e instalar sus dependencias. Para clonar el repositorio vía https: https://github.com/bealazo/podcaster-react.git, previamente es necesario tener instalado Git. Para instalar las dependencias es necesario tener instalado un gestor de paquetes como npm o yarn.
